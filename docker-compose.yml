@@ -8,4 +8,4 @@ services:
       - "3000:3000"
     volumes:
       - .:/go/src/app
-    command: nodemon --exec go run main.go --signal SIGTERM
+    command: sh run.sh

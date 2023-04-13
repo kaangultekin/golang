@@ -1,24 +1,20 @@
-# Base image
 FROM golang:1.19
 
-# Install nodemon
 RUN apt-get update && apt-get install -y npm
 RUN npm install -g nodemon
 
-# Create a working directory
 WORKDIR /go/src/app
 
-# Copy the source code to the container
+COPY go.mod go.sum ./
+
+RUN go mod download
+
 COPY . .
 
-# Build the Go binary
 RUN go build -o app
 
-# Expose the port the application will listen on
 EXPOSE 3000
 
-# Set the environment variable
 ENV ENV=prod
 
-# Set the entry point for the container
-CMD ["nodemon", "app.js"]
+CMD ["sh", "run.sh"]
