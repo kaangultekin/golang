@@ -18,7 +18,7 @@ RUN go build -o app
 EXPOSE 3000
 
 # Set the environment variable
-ENV ENVIRONMENT=prod
+ENV ENV=prod
 
 # Set the entry point for the container
 CMD ["nodemon", "app.js"]
