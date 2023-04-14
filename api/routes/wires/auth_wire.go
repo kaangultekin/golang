@@ -8,15 +8,15 @@ import (
 	authController "golang/api/controllers/auth"
 	iAuthService "golang/api/interfaces/auth"
 	iUserRepository "golang/api/interfaces/user"
-	"golang/api/providers/auth"
+	authProviders "golang/api/providers/auth"
 	userProviders "golang/api/providers/user"
 	userRepository "golang/api/repositories/user"
 	authService "golang/api/services/auth"
 )
 
 var authProviderSet = wire.NewSet(
-	providers.AuthControllerProvider,
-	providers.AuthServiceProvider,
+	authProviders.AuthControllerProvider,
+	authProviders.AuthServiceProvider,
 	wire.Bind(new(iAuthService.IAuthService), new(*authService.AuthService)),
 )
 
