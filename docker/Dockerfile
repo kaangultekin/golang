@@ -13,7 +13,7 @@ COPY . .
 
 RUN go build -o app
 
-EXPOSE 3000
+EXPOSE 8090
 
 ENV ENV=prod
 

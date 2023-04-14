@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     ports:
-      - "3000:3000"
+      - "8090:3000"
     volumes:
       - .:/go/src/app
     command: sh run.sh
