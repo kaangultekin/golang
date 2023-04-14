@@ -5,18 +5,18 @@ package wires
 
 import (
 	"github.com/google/wire"
-	authController "golang/controllers/auth"
-	iAuthService "golang/interfaces/auth"
-	iUserRepository "golang/interfaces/user"
-	authProviders "golang/providers/auth"
-	userProviders "golang/providers/user"
-	userRepository "golang/repositories/user"
-	authService "golang/services/auth"
+	authController "golang/api/controllers/auth"
+	iAuthService "golang/api/interfaces/auth"
+	iUserRepository "golang/api/interfaces/user"
+	"golang/api/providers/auth"
+	userProviders "golang/api/providers/user"
+	userRepository "golang/api/repositories/user"
+	authService "golang/api/services/auth"
 )
 
 var authProviderSet = wire.NewSet(
-	authProviders.AuthControllerProvider,
-	authProviders.AuthServiceProvider,
+	providers.AuthControllerProvider,
+	providers.AuthServiceProvider,
 	wire.Bind(new(iAuthService.IAuthService), new(*authService.AuthService)),
 )
 

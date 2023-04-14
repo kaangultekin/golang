@@ -1,7 +1,7 @@
 package providers
 
 import (
-	userRepository "golang/repositories/user"
+	userRepository "golang/api/repositories/user"
 )
 
 func UserRepositoryProvider() *userRepository.UserRepository {

@@ -1,8 +1,8 @@
 package auth
 
 import (
-	userRepository "golang/interfaces/user"
-	userModel "golang/models/user"
+	userRepository "golang/api/interfaces/user"
+	userModel "golang/api/models/user"
 )
 
 type AuthService struct {

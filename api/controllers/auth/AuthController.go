@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/gofiber/fiber/v2"
-	authService "golang/interfaces/auth"
+	authService "golang/api/interfaces/auth"
 	"strconv"
 )
 

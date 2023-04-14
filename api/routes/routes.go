@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"golang/routes/wires"
+	"golang/api/routes/wires"
 )
 
 func Routes(app *fiber.App) {

@@ -1,7 +1,7 @@
 package user
 
 import (
-	UserModel "golang/models/user"
+	UserModel "golang/api/models/user"
 )
 
 type UserRepository struct{}
