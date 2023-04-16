@@ -7,11 +7,14 @@ WORKDIR /go/src/app
 
 COPY go.mod go.sum ./
 
+RUN go mod tidy
 RUN go mod download
 
-COPY . .
+RUN go get -u github.com/gofiber/fiber/v2@v2.43.0
 
-RUN go build -o app
+ENV PATH=$PATH:/go/src/app
+
+COPY . .
 
 EXPOSE 8090
 

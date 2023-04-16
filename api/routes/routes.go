@@ -2,12 +2,15 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"golang/api/routes/wires"
+	authProviders "golang/api/providers/auth"
+	userProviders "golang/api/providers/user"
 )
 
 func Routes(app *fiber.App) {
 
-	authController := wires.InitializeAuthController()
+	userRepositoryProvider := userProviders.UserRepositoryProvider()
+	authServiceProvider := authProviders.AuthServiceProvider(userRepositoryProvider)
+	authControllerProvider := authProviders.AuthControllerProvider(authServiceProvider)
 
-	app.Get("/user/:id", authController.GetUserByID)
+	app.Get("/user/:id", authControllerProvider.GetUserByID)
 }
