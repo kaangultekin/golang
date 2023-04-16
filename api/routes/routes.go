@@ -7,10 +7,11 @@ import (
 )
 
 func Routes(app *fiber.App) {
+	api := app.Group("/api")
 
 	userRepositoryProvider := userProviders.UserRepositoryProvider()
 	authServiceProvider := authProviders.AuthServiceProvider(userRepositoryProvider)
 	authControllerProvider := authProviders.AuthControllerProvider(authServiceProvider)
 
-	app.Get("/user/:id", authControllerProvider.GetUserByID)
+	api.Get("/user/:id", authControllerProvider.GetUserByID)
 }
