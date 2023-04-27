@@ -1,9 +1,9 @@
 package user
 
 import (
-	"golang/api/structs"
+	"golang/api/structs/result"
 )
 
 type IUserRepository interface {
-	GetByID(id int) (*structs.Result, error)
+	GetByID(id int) (*result.Result, error)
 }

@@ -3,14 +3,13 @@ package user
 import (
 	"golang/api/config"
 	UserModel "golang/api/models/user"
-	"golang/api/structs"
+	"golang/api/structs/result"
 )
 
-type UserRepository struct {
-}
+type UserRepository struct{}
 
-func (ur *UserRepository) GetByID(id int) (*structs.Result, error) {
-	result := &structs.Result{
+func (ur *UserRepository) GetByID(id int) (*result.Result, error) {
+	result := &result.Result{
 		Datas: &UserModel.User{},
 	}
 
