@@ -12,7 +12,10 @@ RUN go mod download
 
 RUN go get -u github.com/gofiber/fiber/v2@v2.43.0
 
-ENV PATH=$PATH:/go/src/app
+RUN go get github.com/joho/godotenv
+
+RUN go get -u gorm.io/gorm
+RUN go get -u gorm.io/driver/postgres
 
 COPY . .
 

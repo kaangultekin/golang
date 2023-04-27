@@ -1,9 +1,9 @@
 package auth
 
 import (
-	userModel "golang/api/models/user"
+	"golang/api/structs"
 )
 
 type IAuthService interface {
-	GetUserByID(id int) (*userModel.User, error)
+	GetUserByID(id int) (*structs.Result, error)
 }

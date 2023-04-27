@@ -1,19 +1,24 @@
 package user
 
 import (
+	"golang/api/config"
 	UserModel "golang/api/models/user"
+	"golang/api/structs"
 )
 
-type UserRepository struct{}
+type UserRepository struct {
+}
 
-func (ur *UserRepository) GetByID(id int) (*UserModel.User, error) {
-	user := &UserModel.User{
-		ID:       id,
-		Name:     "Kaan",
-		Surname:  "G",
-		Password: "1234",
-		Email:    "kaangultekin1907@gmail.com",
+func (ur *UserRepository) GetByID(id int) (*structs.Result, error) {
+	result := &structs.Result{
+		Datas: &UserModel.User{},
 	}
 
-	return user, nil
+	config.DB.Table("users").
+		Select("id, status, name, surname, email, created_at, updated_at").
+		Where("id = ?", id).
+		Order("id desc").
+		First(&result.Datas)
+
+	return result, nil
 }

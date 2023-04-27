@@ -1,9 +1,12 @@
 package user
 
 type User struct {
-	ID       int
-	Name     string
-	Surname  string
-	Email    string
-	Password string
+	ID        int    `json:"id"`
+	Status    int    `json:"status"`
+	Name      string `json:"name"`
+	Surname   string `json:"surname"`
+	Email     string `json:"email"`
+	password  string
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
