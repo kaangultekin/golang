@@ -1,10 +1,10 @@
 package providers
 
 import (
-	iUserRepository "golang/api/interfaces/user"
-	authService "golang/api/services/auth"
+	userInterfaces "golang/api/interfaces/user"
+	authServices "golang/api/services/auth"
 )
 
-func AuthServiceProvider(userRepository iUserRepository.IUserRepository) *authService.AuthService {
-	return &authService.AuthService{UserRepository: userRepository}
+func AuthServiceProvider(userRepository userInterfaces.IUserRepository) *authServices.AuthService {
+	return &authServices.AuthService{UserRepository: userRepository}
 }

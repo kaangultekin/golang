@@ -2,16 +2,30 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	authProviders "golang/api/providers/auth"
-	userProviders "golang/api/providers/user"
+	"golang/api/containers"
+	authValidations "golang/api/validations/auth"
 )
 
 func Routes(app *fiber.App) {
+	serviceContainer := containers.ServiceContainer()
+
+	injectConnectedToAPIController := serviceContainer.InjectConnectedToAPIController()
+	injectAuthController := serviceContainer.InjectAuthController()
+	injectEndpointNotFoundController := serviceContainer.InjectEndpointNotFoundController()
+
 	api := app.Group("/api")
+	authControllerApi := api.Group("auth")
 
-	userRepositoryProvider := userProviders.UserRepositoryProvider()
-	authServiceProvider := authProviders.AuthServiceProvider(userRepositoryProvider)
-	authControllerProvider := authProviders.AuthControllerProvider(authServiceProvider)
+	/* Connected */
+	app.All("/", injectConnectedToAPIController.ConnectedToAPI)
+	/* Connected */
 
-	api.Get("/user/:id", authControllerProvider.GetUserByID)
+	/* AuthController */
+	authControllerApi.Get("/user/:id", injectAuthController.GetUserByID)
+	authControllerApi.Post("/register", authValidations.RegisterFormValidation(), injectAuthController.Register)
+	/* AuthController */
+
+	/* Not Found */
+	app.Use(injectEndpointNotFoundController.EndpointNotFound)
+	/* Not Found */
 }

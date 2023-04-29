@@ -1,4 +1,9 @@
 #!/bin/sh
 
-docker-compose up --build
+if [ ! -f "bin/main" ]; then
+  docker-compose --build
+fi
+
+docker-compose up
+
 nodemon --exec go run main.go --signal SIGTERM

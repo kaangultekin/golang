@@ -1,15 +1,15 @@
 package auth
 
 import (
-	userRepository "golang/api/interfaces/user"
-	"golang/api/structs/result"
+	userInterfaces "golang/api/interfaces/user"
+	resultStructs "golang/api/structs/result"
 )
 
 type AuthService struct {
-	UserRepository userRepository.IUserRepository
+	UserRepository userInterfaces.IUserRepository
 }
 
-func (as *AuthService) GetUserByID(id int) (*result.Result, error) {
+func (as *AuthService) GetUserByID(id int) (*resultStructs.ResultStruct, error) {
 	user, err := as.UserRepository.GetByID(id)
 	if err != nil {
 		return nil, err

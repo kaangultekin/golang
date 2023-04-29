@@ -1,10 +1,10 @@
 package providers
 
 import (
-	authController "golang/api/controllers/auth"
-	iAuthService "golang/api/interfaces/auth"
+	authControllers "golang/api/controllers/auth"
+	authInterfaces "golang/api/interfaces/auth"
 )
 
-func AuthControllerProvider(authService iAuthService.IAuthService) *authController.AuthController {
-	return &authController.AuthController{AuthService: authService}
+func AuthControllerProvider(authService authInterfaces.IAuthService) *authControllers.AuthController {
+	return &authControllers.AuthController{AuthService: authService}
 }

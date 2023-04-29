@@ -14,6 +14,8 @@ RUN go get -u github.com/gofiber/fiber/v2@v2.43.0
 
 RUN go get github.com/joho/godotenv
 
+RUN go get github.com/go-playground/validator/v10
+
 RUN go get -u gorm.io/gorm
 RUN go get -u gorm.io/driver/postgres
 
