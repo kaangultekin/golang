@@ -2,6 +2,7 @@ package auth
 
 import (
 	userInterfaces "golang/api/interfaces/user"
+	authFormStructs "golang/api/structs/form/auth"
 	resultStructs "golang/api/structs/result"
 )
 
@@ -15,4 +16,8 @@ func (as *AuthService) GetUserByID(id int) (*resultStructs.ResultStruct, error) 
 		return nil, err
 	}
 	return user, nil
+}
+
+func (as *AuthService) Register(registerForm authFormStructs.RegisterFormStruct) (interface{}, error) {
+	return registerForm, nil
 }

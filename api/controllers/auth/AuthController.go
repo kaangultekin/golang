@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	authInterfaces "golang/api/interfaces/auth"
 	authFormStructs "golang/api/structs/form/auth"
+	resultStructs "golang/api/structs/result"
 	"strconv"
 )
 
@@ -30,9 +31,27 @@ func (ac *AuthController) GetUserByID(c *fiber.Ctx) error {
 }
 
 func (ac *AuthController) Register(c *fiber.Ctx) error {
+	var (
+		registerForm authFormStructs.RegisterFormStruct
+		result       *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
 
-	var registerForm authFormStructs.RegisterFormStruct
 	c.BodyParser(&registerForm)
 
-	return c.Status(fiber.StatusOK).JSON(registerForm)
+	register, err := ac.AuthService.Register(registerForm)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusCreated
+	result.Message = "New user registered."
+	result.Datas = register
+
+	return c.Status(result.Code).JSON(result)
 }

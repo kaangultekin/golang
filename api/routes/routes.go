@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"golang/api/containers"
-	authValidations "golang/api/validations/auth"
+	"golang/api/validations"
 )
 
 func Routes(app *fiber.App) {
@@ -20,10 +20,10 @@ func Routes(app *fiber.App) {
 	app.All("/", injectConnectedToAPIController.ConnectedToAPI)
 	/* Connected */
 
-	/* AuthController */
+	/* Auth Controller */
 	authControllerApi.Get("/user/:id", injectAuthController.GetUserByID)
-	authControllerApi.Post("/register", authValidations.RegisterFormValidation(), injectAuthController.Register)
-	/* AuthController */
+	authControllerApi.Post("/register", validations.Validation("RegisterForm"), injectAuthController.Register)
+	/* Auth Controller */
 
 	/* Not Found */
 	app.Use(injectEndpointNotFoundController.EndpointNotFound)

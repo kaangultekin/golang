@@ -12,7 +12,6 @@ func (cac *ConnectedToAPIController) ConnectedToAPI(c *fiber.Ctx) error {
 		Success: true,
 		Code:    fiber.StatusOK,
 		Message: "Connected to API.",
-		Datas:   []string{},
 	}
 
 	return c.JSON(result)

@@ -12,7 +12,6 @@ func (enfc *EndpointNotFoundController) EndpointNotFound(c *fiber.Ctx) error {
 		Success: false,
 		Code:    fiber.StatusNotFound,
 		Message: "Endpoint not found.",
-		Datas:   []string{},
 	}
 
 	return c.Status(result.Code).JSON(result)
