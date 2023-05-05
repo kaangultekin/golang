@@ -2,6 +2,7 @@ package validations
 
 import (
 	"github.com/gofiber/fiber/v2"
+	messageConstants "golang/api/constants/message"
 	authFormStructs "golang/api/structs/form/auth"
 	resultStructs "golang/api/structs/result"
 )
@@ -17,7 +18,7 @@ func Validation(form string) fiber.Handler {
 		if validateForm == nil {
 			result.Success = false
 			result.Code = fiber.StatusNotFound
-			result.Message = "Form not found."
+			result.Message = messageConstants.ErrFormNotFound
 
 			return c.Status(result.Code).JSON(result)
 		}
@@ -29,7 +30,7 @@ func Validation(form string) fiber.Handler {
 		if !validate.Success {
 			result.Success = validate.Success
 			result.Code = fiber.StatusBadRequest
-			result.Message = "Validation failed."
+			result.Message = messageConstants.ErrValidationFailed
 			result.Datas = validate.ErrorFields
 
 			return c.Status(result.Code).JSON(result)

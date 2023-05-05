@@ -21,7 +21,6 @@ func Routes(app *fiber.App) {
 	/* Connected */
 
 	/* Auth Controller */
-	authControllerApi.Get("/user/:id", injectAuthController.GetUserByID)
 	authControllerApi.Post("/register", validations.Validation("RegisterForm"), injectAuthController.Register)
 	/* Auth Controller */
 

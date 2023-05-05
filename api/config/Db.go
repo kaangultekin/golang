@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	messageConstants "golang/api/constants/message"
 	"gorm.io/driver/postgres"
 	_ "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,7 +16,7 @@ func ConnectDatabase() {
 	err := godotenv.Load()
 
 	if err != nil {
-		panic("Error loading .env file")
+		panic(messageConstants.ErrEnvFailed)
 	}
 
 	postgresHost := os.Getenv("POSTGRES_HOST")
@@ -35,7 +36,7 @@ func ConnectDatabase() {
 	}), &gorm.Config{})
 
 	if err != nil {
-		panic("Failed to connect to database!")
+		panic(messageConstants.ErrConnectDBFailed)
 	}
 
 	DB = db

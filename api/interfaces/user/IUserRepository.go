@@ -1,9 +1,9 @@
 package user
 
 import (
-	resultStructs "golang/api/structs/result"
+	userModels "golang/api/models/user"
 )
 
 type IUserRepository interface {
-	GetByID(id int) (*resultStructs.ResultStruct, error)
+	GetByEmail(email string) (*userModels.User, error)
 }

@@ -1,23 +1,22 @@
 package user
 
 import (
+	"errors"
 	"golang/api/config"
+	messageConstants "golang/api/constants/message"
 	userModels "golang/api/models/user"
-	resultStructs "golang/api/structs/result"
 )
 
 type UserRepository struct{}
 
-func (ur *UserRepository) GetByID(id int) (*resultStructs.ResultStruct, error) {
-	result := &resultStructs.ResultStruct{
-		Datas: &userModels.User{},
+func (ur *UserRepository) GetByEmail(email string) (*userModels.User, error) {
+	var user userModels.User
+
+	result := config.DB.Where("email = ?", email).First(&user)
+
+	if result.Error != nil {
+		return nil, errors.New(messageConstants.ErrUserNotFound)
 	}
 
-	config.DB.Table("users").
-		Select("id, status, name, surname, email, created_at, updated_at").
-		Where("id = ?", id).
-		Order("id desc").
-		First(&result.Datas)
-
-	return result, nil
+	return &user, nil
 }

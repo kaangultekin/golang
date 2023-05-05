@@ -2,6 +2,7 @@ package general
 
 import (
 	"github.com/gofiber/fiber/v2"
+	messageConstants "golang/api/constants/message"
 	resultStructs "golang/api/structs/result"
 )
 
@@ -11,7 +12,7 @@ func (cac *ConnectedToAPIController) ConnectedToAPI(c *fiber.Ctx) error {
 	result := &resultStructs.ResultStruct{
 		Success: true,
 		Code:    fiber.StatusOK,
-		Message: "Connected to API.",
+		Message: messageConstants.SuccessAPI,
 	}
 
 	return c.JSON(result)
