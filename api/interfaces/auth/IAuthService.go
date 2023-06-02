@@ -6,4 +6,6 @@ import (
 
 type IAuthService interface {
 	Register(registerForm authFormStructs.RegisterFormStruct) (interface{}, error)
+	Login(loginForm authFormStructs.LoginFormStruct) (interface{}, error)
+	GetUser(id int) (interface{}, error)
 }
