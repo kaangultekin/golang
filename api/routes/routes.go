@@ -26,7 +26,7 @@ func Routes(app *fiber.App) {
 	/* Auth Controller */
 	authControllerApi.Post("/register", validations.Validation("RegisterForm"), injectAuthController.Register)
 	authControllerApi.Post("/login", validations.Validation("LoginForm"), injectAuthController.Login)
-	authControllerApi.Get("/me", authMiddleware, injectAuthController.GetUser)
+	authControllerApi.Get("/me", authMiddleware, injectAuthController.Me)
 	/* Auth Controller */
 
 	/* Not Found */

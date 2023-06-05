@@ -65,7 +65,7 @@ func (ac *AuthController) Login(c *fiber.Ctx) error {
 	return c.Status(result.Code).JSON(result)
 }
 
-func (ac *AuthController) GetUser(c *fiber.Ctx) error {
+func (ac *AuthController) Me(c *fiber.Ctx) error {
 	var (
 		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
 	)
@@ -77,7 +77,7 @@ func (ac *AuthController) GetUser(c *fiber.Ctx) error {
 	if err != nil {
 		result.Success = false
 		result.Code = fiber.StatusNotFound
-		result.Message = messageConstants.ErrUserNotFound
+		result.Message = err.Error()
 
 		return c.Status(result.Code).JSON(result)
 	}
