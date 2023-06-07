@@ -6,11 +6,20 @@ import (
 	"golang/api/routes"
 )
 
+var postgresDb = make(chan bool)
+
 func init() {
-	go config.ConnectPostgresDB()
+	go func() {
+		config.ConnectPostgresDB()
+		postgresDb <- true
+	}()
 }
 
 func main() {
+	if !<-postgresDb {
+		return
+	}
+
 	app := fiber.New()
 
 	routes.Routes(app)

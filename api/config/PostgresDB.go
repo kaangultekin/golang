@@ -62,6 +62,6 @@ func ConnectPostgresDB() {
 		}
 
 		fmt.Println(err)
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 5)
 	}
 }
