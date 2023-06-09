@@ -25,7 +25,7 @@ func CompareHashAndPassword(hashedPassword string, password string) (bool, error
 	return true, nil
 }
 
-func GenerateJWTToken(user *userModels.User) (string, error) {
+func GenerateJWT(user *userModels.User) (string, error) {
 	jwtSecret := os.Getenv("JWT_SECRET")
 
 	day := time.Hour * 24

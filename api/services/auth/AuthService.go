@@ -55,7 +55,7 @@ func (as *AuthService) Login(loginForm authFormStructs.LoginFormStruct) (interfa
 		return nil, errors.New(messageConstants.ErrUserStatusPassive)
 	}
 
-	token, tokenErr := helpers.GenerateJWTToken(user)
+	token, tokenErr := helpers.GenerateJWT(user)
 
 	if tokenErr != nil {
 		return nil, tokenErr
