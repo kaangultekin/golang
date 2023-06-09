@@ -20,6 +20,7 @@ RUN go get -u gorm.io/gorm
 RUN go get -u gorm.io/driver/postgres
 
 RUN go get -u github.com/gofiber/jwt/v3
+RUN go get -u github.com/golang-jwt/jwt/v4
 
 COPY . .
 
