@@ -1,8 +1,6 @@
 #!/bin/sh
 
-if [ ! -f "bin/main" ]; then
-  docker-compose --build
-fi
+docker-compose build
 
 docker-compose up
 

@@ -2,3 +2,4 @@
 api/routes/wires/wire_gen.go
 .env
 postgres-data/
+redis-data/

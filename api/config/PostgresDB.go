@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"github.com/joho/godotenv"
 	messageConstants "golang/api/constants/message"
@@ -9,16 +10,15 @@ import (
 	_ "gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
-	"time"
 )
 
 var DB *gorm.DB
 
-func PostgresDB() (bool, error) {
+func ConnectPostgresDB() (bool, error) {
 	err := godotenv.Load()
 
 	if err != nil {
-		return false, fmt.Errorf(messageConstants.ErrEnvFailed)
+		return false, errors.New(messageConstants.ErrEnvFailed)
 	}
 
 	postgresHost := os.Getenv("POSTGRES_HOST")
@@ -38,7 +38,7 @@ func PostgresDB() (bool, error) {
 	}), &gorm.Config{})
 
 	if err != nil {
-		return false, fmt.Errorf(messageConstants.ErrConnectDBFailed)
+		return false, errors.New(messageConstants.ErrConnectDBFailed)
 	}
 
 	DB = db
@@ -50,18 +50,4 @@ func RunMigrations() {
 	DB.AutoMigrate(
 		userModels.User{},
 	)
-}
-
-func ConnectPostgresDB() {
-	for {
-		db, err := PostgresDB()
-
-		if db {
-			RunMigrations()
-			break
-		}
-
-		fmt.Println(err)
-		time.Sleep(time.Second * 5)
-	}
 }

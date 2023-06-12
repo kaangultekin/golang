@@ -1,6 +1,6 @@
 FROM golang:1.19
 
-RUN apt-get update && apt-get install -y npm
+RUN apt-get update && apt-get install -y npm redis-server
 RUN npm install -g nodemon
 
 WORKDIR /go/src/app
