@@ -3,5 +3,6 @@ package general
 import "time"
 
 const (
-	OneDay = time.Hour * 24
+	FiveSeconds = time.Second * 5
+	OneDay      = time.Hour * 24
 )

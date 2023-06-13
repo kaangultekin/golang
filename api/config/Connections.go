@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	generalConstants "golang/api/constants/general"
 	"time"
 )
 
@@ -43,7 +44,7 @@ func Connections() {
 					fmt.Println(redisErr)
 				}
 
-				time.Sleep(time.Second * 5)
+				time.Sleep(generalConstants.FiveSeconds)
 			}
 		}
 	}()
