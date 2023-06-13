@@ -42,8 +42,10 @@ func Validation(form string) fiber.Handler {
 
 func getValidateForm(form string) interface{} {
 	var (
-		registerForm = &authFormStructs.RegisterFormStruct{}
-		loginForm    = &authFormStructs.LoginFormStruct{}
+		registerForm       = &authFormStructs.RegisterFormStruct{}
+		loginForm          = &authFormStructs.LoginFormStruct{}
+		updateMeForm       = &authFormStructs.UpdateMeFormStruct{}
+		updatePasswordForm = &authFormStructs.UpdatePasswordFormStruct{}
 	)
 
 	switch form {
@@ -51,6 +53,10 @@ func getValidateForm(form string) interface{} {
 		return registerForm
 	case "LoginForm":
 		return loginForm
+	case "UpdateMeForm":
+		return updateMeForm
+	case "UpdatePasswordForm":
+		return updatePasswordForm
 	default:
 		return nil
 	}

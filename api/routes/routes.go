@@ -27,6 +27,8 @@ func Routes(app *fiber.App) {
 	{
 		authApi.Get("/me", injectAuthController.Me)
 		authApi.Post("/logout", injectAuthController.Logout)
+		authApi.Put("/update-me", validations.Validation("UpdateMeForm"), injectAuthController.UpdateMe)
+		authApi.Put("/update-password", validations.Validation("UpdatePasswordForm"), injectAuthController.UpdatePassword)
 	}
 
 	app.Use(injectEndpointNotFoundController.EndpointNotFound)

@@ -111,3 +111,54 @@ func (ac *AuthController) Logout(c *fiber.Ctx) error {
 
 	return c.Status(result.Code).JSON(result)
 }
+
+func (ac *AuthController) UpdateMe(c *fiber.Ctx) error {
+	var (
+		updateMeForm authFormStructs.UpdateMeFormStruct
+		result       *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
+
+	c.BodyParser(&updateMeForm)
+
+	updateMe, err := ac.AuthService.UpdateMe(updateMeForm, c)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusOK
+	result.Message = messageConstants.SuccessUpdateMe
+	result.Datas = updateMe
+
+	return c.Status(result.Code).JSON(result)
+}
+
+func (ac *AuthController) UpdatePassword(c *fiber.Ctx) error {
+	var (
+		updatePasswordForm authFormStructs.UpdatePasswordFormStruct
+		result             *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
+
+	c.BodyParser(&updatePasswordForm)
+
+	_, err := ac.AuthService.UpdatePassword(updatePasswordForm, c)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusOK
+	result.Message = messageConstants.SuccessUpdatePassword
+
+	return c.Status(result.Code).JSON(result)
+}

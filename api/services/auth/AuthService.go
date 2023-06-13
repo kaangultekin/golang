@@ -94,3 +94,55 @@ func (as *AuthService) Logout(c *fiber.Ctx) (interface{}, error) {
 
 	return messageConstants.SuccessGeneralMessage, nil
 }
+
+func (as *AuthService) UpdateMe(updateMeForm authFormStructs.UpdateMeFormStruct, c *fiber.Ctx) (interface{}, error) {
+	userId := helpers.GetUserId(c)
+	checkEmail, _ := as.UserRepository.GetByEmail(updateMeForm.Email)
+
+	if checkEmail != nil && userId != int(checkEmail.ID) {
+		return nil, errors.New(messageConstants.ErrUsedEmail)
+	}
+
+	user, userErr := as.UserRepository.GetById(userId)
+
+	if userErr != nil {
+		return nil, userErr
+	}
+
+	user.Name = updateMeForm.Name
+	user.Surname = updateMeForm.Surname
+	user.Email = updateMeForm.Email
+
+	updateErr := config.DB.Save(user)
+
+	if updateErr.Error != nil {
+		return nil, updateErr.Error
+	}
+
+	return user, nil
+}
+
+func (as *AuthService) UpdatePassword(updatePasswordForm authFormStructs.UpdatePasswordFormStruct, c *fiber.Ctx) (interface{}, error) {
+	userId := helpers.GetUserId(c)
+	user, err := as.UserRepository.GetById(userId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	compareHashAndPassword, _ := helpers.CompareHashAndPassword(user.Password, updatePasswordForm.OldPassword)
+
+	if !compareHashAndPassword {
+		return nil, errors.New(messageConstants.ErrCompareHashAndOldPassword)
+	}
+
+	user.Password = helpers.HashPassword(updatePasswordForm.Password)
+
+	updateErr := config.DB.Save(user)
+
+	if updateErr.Error != nil {
+		return nil, updateErr.Error
+	}
+
+	return true, nil
+}
