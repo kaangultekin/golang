@@ -9,6 +9,7 @@ import (
 	userInterfaces "golang/api/interfaces/user"
 	userModels "golang/api/models/user"
 	authFormStructs "golang/api/structs/form/auth"
+	"time"
 )
 
 type AuthService struct {
@@ -75,4 +76,21 @@ func (as *AuthService) GetUser(id int) (interface{}, error) {
 	}
 
 	return user, nil
+}
+
+func (as *AuthService) Logout(c *fiber.Ctx) (interface{}, error) {
+	token := helpers.GetToken(c)
+	claims := helpers.ParseToken(c)
+
+	exp := claims["exp"].(float64)
+	expTime := time.Unix(int64(exp), 0)
+	duration := expTime.Sub(time.Now())
+
+	err := config.Redis.Set(c.Context(), token, token, duration).Err()
+
+	if err != nil {
+		return nil, errors.New(messageConstants.ErrFailedLogout)
+	}
+
+	return messageConstants.SuccessGeneralMessage, nil
 }

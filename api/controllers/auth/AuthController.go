@@ -89,3 +89,25 @@ func (ac *AuthController) Me(c *fiber.Ctx) error {
 
 	return c.Status(result.Code).JSON(result)
 }
+
+func (ac *AuthController) Logout(c *fiber.Ctx) error {
+	var (
+		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
+
+	logout, err := ac.AuthService.Logout(c)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusOK
+	result.Message = logout.(string)
+
+	return c.Status(result.Code).JSON(result)
+}

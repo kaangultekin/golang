@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jtoken "github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
+	generalConstants "golang/api/constants/general"
 	userModels "golang/api/models/user"
 	"os"
 	"time"
@@ -28,7 +29,7 @@ func CompareHashAndPassword(hashedPassword string, password string) (bool, error
 func GenerateJWT(user *userModels.User) (string, error) {
 	jwtSecret := os.Getenv("JWT_SECRET")
 
-	day := time.Hour * 24
+	day := generalConstants.OneDay
 	claims := jtoken.MapClaims{
 		"ID":    user.ID,
 		"email": user.Email,
@@ -57,4 +58,8 @@ func GetUserId(c *fiber.Ctx) int {
 	userId := int(userIdFloat)
 
 	return userId
+}
+
+func GetToken(c *fiber.Ctx) string {
+	return c.Locals("user").(*jtoken.Token).Raw
 }

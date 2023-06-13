@@ -7,7 +7,6 @@ import (
 
 func Connections() {
 	maxRetry := 10
-	timeout := time.Second * 5
 
 	postgresDB := make(chan bool)
 	redisDB := make(chan bool)
@@ -44,7 +43,7 @@ func Connections() {
 					fmt.Println(redisErr)
 				}
 
-				time.Sleep(timeout)
+				time.Sleep(time.Second * 5)
 			}
 		}
 	}()

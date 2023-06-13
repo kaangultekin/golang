@@ -26,6 +26,7 @@ func Routes(app *fiber.App) {
 	authApi.Use(authMiddlewares.AuthMiddleware())
 	{
 		authApi.Get("/me", injectAuthController.Me)
+		authApi.Post("/logout", injectAuthController.Logout)
 	}
 
 	app.Use(injectEndpointNotFoundController.EndpointNotFound)

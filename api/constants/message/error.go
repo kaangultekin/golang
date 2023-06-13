@@ -12,4 +12,5 @@ const (
 	ErrCompareHashAndPassword = "Password is incorrect."
 	ErrUserStatusPassive      = "User's status is passive."
 	ErrInvalidToken           = "Invalid token."
+	ErrFailedLogout           = "Failed to logout."
 )
