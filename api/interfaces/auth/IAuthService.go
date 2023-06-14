@@ -12,4 +12,5 @@ type IAuthService interface {
 	Logout(c *fiber.Ctx) (interface{}, error)
 	UpdateMe(updateMeForm authFormStructs.UpdateMeFormStruct, c *fiber.Ctx) (interface{}, error)
 	UpdatePassword(updatePasswordForm authFormStructs.UpdatePasswordFormStruct, c *fiber.Ctx) (interface{}, error)
+	GetUsers(c *fiber.Ctx) (interface{}, error)
 }

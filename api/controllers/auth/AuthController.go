@@ -162,3 +162,26 @@ func (ac *AuthController) UpdatePassword(c *fiber.Ctx) error {
 
 	return c.Status(result.Code).JSON(result)
 }
+
+func (ac *AuthController) GetUsers(c *fiber.Ctx) error {
+	var (
+		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
+
+	getUsers, err := ac.AuthService.GetUsers(c)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusOK
+	result.Message = messageConstants.SuccessGeneralMessage
+	result.Datas = getUsers
+
+	return c.Status(result.Code).JSON(result)
+}

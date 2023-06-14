@@ -1,9 +1,11 @@
 package auth
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"golang/api/config"
+	"golang/api/constants/general"
 	messageConstants "golang/api/constants/message"
 	"golang/api/helpers"
 	userInterfaces "golang/api/interfaces/user"
@@ -145,4 +147,38 @@ func (as *AuthService) UpdatePassword(updatePasswordForm authFormStructs.UpdateP
 	}
 
 	return true, nil
+}
+
+func (as *AuthService) GetUsers(c *fiber.Ctx) (interface{}, error) {
+	var users []userModels.User
+
+	getUsersForRedis, errForRedis := config.Redis.Get(c.Context(), "users").Result()
+
+	if errForRedis == nil {
+		if errUnmarshalUsers := json.Unmarshal([]byte(getUsersForRedis), &users); errUnmarshalUsers != nil {
+			return nil, errUnmarshalUsers
+		}
+
+		return users, nil
+	}
+
+	getUsers, err := as.UserRepository.GetUsers()
+
+	if err != nil {
+		return nil, err
+	}
+
+	marshalUsers, marshalUsersErr := json.Marshal(getUsers)
+
+	if marshalUsersErr != nil {
+		return nil, marshalUsersErr
+	}
+
+	setUsersErr := config.Redis.Set(c.Context(), "users", marshalUsers, general.OneDay).Err()
+
+	if setUsersErr != nil {
+		return nil, setUsersErr
+	}
+
+	return getUsers, nil
 }

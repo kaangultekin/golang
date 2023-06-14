@@ -34,3 +34,18 @@ func (ur *UserRepository) GetById(id int) (*userModels.User, error) {
 
 	return &user, nil
 }
+
+func (ur *UserRepository) GetUsers() (*[]userModels.User, error) {
+	var users []userModels.User
+
+	result := config.DB.Where("status", 1).
+		Order("id DESC").
+		Limit(1000).
+		Find(&users)
+
+	if result.Error != nil {
+		return nil, errors.New(messageConstants.ErrUserNotFound)
+	}
+
+	return &users, nil
+}
