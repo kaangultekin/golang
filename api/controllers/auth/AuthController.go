@@ -7,6 +7,7 @@ import (
 	authInterfaces "golang/api/interfaces/auth"
 	authFormStructs "golang/api/structs/form/auth"
 	resultStructs "golang/api/structs/result"
+	"strconv"
 )
 
 type AuthController struct {
@@ -182,6 +183,31 @@ func (ac *AuthController) GetUsers(c *fiber.Ctx) error {
 	result.Code = fiber.StatusOK
 	result.Message = messageConstants.SuccessGeneralMessage
 	result.Datas = getUsers
+
+	return c.Status(result.Code).JSON(result)
+}
+
+func (ac *AuthController) GetUser(c *fiber.Ctx) error {
+	var (
+		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
+	)
+
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	getUser, err := ac.AuthService.GetUser(id)
+
+	if err != nil {
+		result.Success = false
+		result.Code = fiber.StatusBadRequest
+		result.Message = err.Error()
+
+		return c.Status(result.Code).JSON(result)
+	}
+
+	result.Success = true
+	result.Code = fiber.StatusOK
+	result.Message = messageConstants.SuccessGeneralMessage
+	result.Datas = getUser
 
 	return c.Status(result.Code).JSON(result)
 }

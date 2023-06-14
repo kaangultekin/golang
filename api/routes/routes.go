@@ -23,6 +23,7 @@ func Routes(app *fiber.App) {
 	usersApi.Post("/register", validations.Validation("RegisterForm"), injectAuthController.Register)
 	usersApi.Post("/login", validations.Validation("LoginForm"), injectAuthController.Login)
 	usersApi.Get("/", injectAuthController.GetUsers)
+	usersApi.Get("/:id", injectAuthController.GetUser)
 
 	authApi.Use(authMiddlewares.AuthMiddleware())
 	{
