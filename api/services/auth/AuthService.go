@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"github.com/gofiber/fiber/v2"
@@ -36,6 +37,18 @@ func (as *AuthService) Register(registerForm authFormStructs.RegisterFormStruct)
 
 	if createErr.Error != nil {
 		return nil, createErr.Error
+	}
+
+	userModelJson, err := json.Marshal(userModel)
+
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	_, esErr := config.ES.Index("users_index", bytes.NewReader(userModelJson))
+
+	if esErr != nil {
+		return nil, errors.New(err.Error())
 	}
 
 	return userModel, nil
