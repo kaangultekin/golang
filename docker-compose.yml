@@ -65,3 +65,5 @@ services:
       - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}"
       - "RABBITMQ_MANAGEMENT_PLUGIN=${RABBITMQ_MANAGEMENT_PLUGIN}"
     restart: always
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq

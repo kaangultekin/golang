@@ -3,3 +3,4 @@
 postgres-data/
 redis-data/
 elasticsearch-data/
+rabbitmq-data/
