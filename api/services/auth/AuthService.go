@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/streadway/amqp"
 	"golang/api/config"
 	"golang/api/constants/general"
 	messageConstants "golang/api/constants/message"
@@ -39,16 +39,30 @@ func (as *AuthService) Register(registerForm authFormStructs.RegisterFormStruct)
 		return nil, createErr.Error
 	}
 
-	userModelJson, err := json.Marshal(userModel)
+	userModelJson, userModelJsonErr := json.Marshal(userModel)
 
-	if err != nil {
-		return nil, errors.New(err.Error())
+	if userModelJsonErr != nil {
+		return nil, userModelJsonErr
 	}
 
-	_, esErr := config.ES.Index("users_index", bytes.NewReader(userModelJson))
+	createQueue, createQueueErr := helpers.CreateQueue(
+		"UsersQueue",
+		false,
+		false,
+		false,
+		false,
+		nil,
+		"",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        userModelJson,
+		},
+	)
 
-	if esErr != nil {
-		return nil, errors.New(err.Error())
+	if !createQueue {
+		return nil, createQueueErr
 	}
 
 	return userModel, nil

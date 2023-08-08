@@ -20,6 +20,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/gofiber/jwt/v3 v3.3.10 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/elastic/go-elasticsearch/v8 v8.0.0 // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.0.0-alpha // indirect
 	github.com/google/uuid v1.3.0 // indirect

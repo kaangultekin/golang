@@ -12,23 +12,27 @@ func Connections() {
 	postgresDB := make(chan bool)
 	redisDB := make(chan bool)
 	es := make(chan bool)
+	rabbitMQ := make(chan bool)
 
 	var postgresDBErr error
 	var redisDBErr error
 	var esErr error
+	var rabbitMQErr error
 
 	go func() {
 		for try := 1; try <= maxRetry; try++ {
 			connectPostgresDB, postgresErr := ConnectPostgresDB()
 			connectRedisDB, redisErr := ConnectRedisDB()
 			connectElasticsearch, elasticsearchErr := ConnectElasticsearch()
+			connectRabbitMQ, rabbitmqErr := ConnectRabbitMQ()
 
-			if connectPostgresDB && connectRedisDB && connectElasticsearch {
+			if connectPostgresDB && connectRedisDB && connectElasticsearch && connectRabbitMQ {
 				RunMigrations()
 
 				postgresDB <- true
 				redisDB <- true
 				es <- true
+				rabbitMQ <- true
 
 				break
 			}
@@ -37,10 +41,12 @@ func Connections() {
 				postgresDBErr = postgresErr
 				redisDBErr = redisErr
 				esErr = elasticsearchErr
+				rabbitMQErr = rabbitmqErr
 
 				postgresDB <- false
 				redisDB <- false
 				es <- false
+				rabbitMQ <- false
 			} else {
 				if postgresErr != nil {
 					fmt.Println(postgresErr)
@@ -52,6 +58,10 @@ func Connections() {
 
 				if elasticsearchErr != nil {
 					fmt.Println(redisErr)
+				}
+
+				if rabbitmqErr != nil {
+					fmt.Println(rabbitmqErr)
 				}
 
 				time.Sleep(generalConstants.FiveSeconds)
@@ -71,7 +81,12 @@ func Connections() {
 		panic(esErr)
 	}
 
+	if !<-rabbitMQ {
+		panic(rabbitMQErr)
+	}
+
 	close(postgresDB)
 	close(redisDB)
 	close(es)
+	close(rabbitMQ)
 }

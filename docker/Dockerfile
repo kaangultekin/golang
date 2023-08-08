@@ -24,6 +24,8 @@ RUN go get github.com/joho/godotenv
 RUN go get github.com/elastic/go-elasticsearch/v8
 RUN go get github.com/elastic/elastic-transport-go/v8
 
+RUN go get github.com/streadway/amqp
+
 RUN go get github.com/go-playground/validator/v10
 
 RUN go get -u gorm.io/gorm
