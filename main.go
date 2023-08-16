@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"golang/api/config"
 	"golang/api/routes"
+	"golang/crons"
 )
 
 func init() {
@@ -12,6 +13,8 @@ func init() {
 
 func main() {
 	app := fiber.New()
+
+	crons.Cron()
 
 	routes.Routes(app)
 

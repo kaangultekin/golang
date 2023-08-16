@@ -26,6 +26,8 @@ RUN go get github.com/elastic/elastic-transport-go/v8
 
 RUN go get github.com/streadway/amqp
 
+RUN go get github.com/robfig/cron/v3@v3.0.0
+
 RUN go get github.com/go-playground/validator/v10
 
 RUN go get -u gorm.io/gorm
