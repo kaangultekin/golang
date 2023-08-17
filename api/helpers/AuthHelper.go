@@ -3,6 +3,7 @@ package helpers
 import (
 	"github.com/gofiber/fiber/v2"
 	jtoken "github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	generalConstants "golang/api/constants/general"
 	userModels "golang/api/models/user"
@@ -31,6 +32,7 @@ func GenerateJWT(user *userModels.User) (string, error) {
 
 	day := generalConstants.OneDay
 	claims := jtoken.MapClaims{
+		"jti":   uuid.New().String(),
 		"ID":    user.ID,
 		"email": user.Email,
 		"exp":   time.Now().Add(day * 1).Unix(),
