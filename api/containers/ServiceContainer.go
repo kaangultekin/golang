@@ -3,6 +3,7 @@ package containers
 import (
 	authControllers "golang/api/controllers/auth"
 	generalControllers "golang/api/controllers/general"
+	userControllers "golang/api/controllers/user"
 	containerInterfaces "golang/api/interfaces/container"
 	authProviders "golang/api/providers/auth"
 	generalProviders "golang/api/providers/general"
@@ -16,6 +17,15 @@ func (k *Kernel) InjectConnectedToAPIController() *generalControllers.ConnectedT
 	connectedToAPIControllerProvider := generalProviders.ConnectedToAPIControllerProvider()
 
 	return connectedToAPIControllerProvider
+}
+
+func (k *Kernel) InjectUserController() *userControllers.UserController {
+	userRepositoryProvider := userProviders.UserRepositoryProvider()
+	userRepositoryProviderForElasticsearch := userProviders.UserRepositoryProviderForElasticsearch()
+	userServiceProvider := userProviders.UserServiceProvider(userRepositoryProvider, userRepositoryProviderForElasticsearch)
+	userControllerProvider := userProviders.UserControllerProvider(userServiceProvider)
+
+	return userControllerProvider
 }
 
 func (k *Kernel) InjectAuthController() *authControllers.AuthController {

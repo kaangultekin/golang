@@ -7,5 +7,5 @@ import (
 type IUserRepository interface {
 	GetByEmail(email string) (*userModels.User, error)
 	GetById(id int) (*userModels.User, error)
-	GetUsers() (*[]userModels.User, error)
+	SearchUsers(query string) (*[]userModels.User, error)
 }

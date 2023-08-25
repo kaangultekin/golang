@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"golang/api/config"
 	messageConstants "golang/api/constants/message"
 	userModels "golang/api/models/user"
@@ -35,12 +36,14 @@ func (ur *UserRepository) GetById(id int) (*userModels.User, error) {
 	return &user, nil
 }
 
-func (ur *UserRepository) GetUsers() (*[]userModels.User, error) {
+func (ur *UserRepository) SearchUsers(query string) (*[]userModels.User, error) {
 	var users []userModels.User
 
-	result := config.DB.Where("status", 1).
+	result := config.DB.Where(fmt.Sprintf("name ILIKE '%s'", "%"+query+"%")).
+		Or(fmt.Sprintf("surname ILIKE '%s'", "%"+query+"%")).
+		Or(fmt.Sprintf("email LIKE '%s'", "%"+query+"%")).
 		Order("id DESC").
-		Limit(1000).
+		Limit(100).
 		Find(&users)
 
 	if result.Error != nil {

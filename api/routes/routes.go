@@ -11,6 +11,7 @@ func Routes(app *fiber.App) {
 	serviceContainer := containers.ServiceContainer()
 
 	injectConnectedToAPIController := serviceContainer.InjectConnectedToAPIController()
+	injectUserController := serviceContainer.InjectUserController()
 	injectAuthController := serviceContainer.InjectAuthController()
 	injectEndpointNotFoundController := serviceContainer.InjectEndpointNotFoundController()
 
@@ -22,12 +23,12 @@ func Routes(app *fiber.App) {
 
 	usersApi.Post("/register", validations.Validation("RegisterForm"), injectAuthController.Register)
 	usersApi.Post("/login", validations.Validation("LoginForm"), injectAuthController.Login)
-	usersApi.Get("/", injectAuthController.GetUsers)
-	usersApi.Get("/:id", injectAuthController.GetUser)
+	usersApi.Get("/:query", injectUserController.SearchUsers)
+	usersApi.Get("/:id", injectUserController.GetUser)
 
 	authApi.Use(authMiddlewares.AuthMiddleware())
 	{
-		authApi.Get("/me", injectAuthController.Me)
+		authApi.Get("/me", injectAuthController.GetMe)
 		authApi.Post("/logout", injectAuthController.Logout)
 		authApi.Put("/update-me", validations.Validation("UpdateMeForm"), injectAuthController.UpdateMe)
 		authApi.Put("/update-password", validations.Validation("UpdatePasswordForm"), injectAuthController.UpdatePassword)

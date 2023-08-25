@@ -6,7 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/streadway/amqp"
 	"golang/api/config"
-	"golang/api/constants/general"
 	messageConstants "golang/api/constants/message"
 	"golang/api/helpers"
 	userInterfaces "golang/api/interfaces/user"
@@ -97,31 +96,16 @@ func (as *AuthService) Login(loginForm authFormStructs.LoginFormStruct) (interfa
 	}, nil
 }
 
-func (as *AuthService) GetUser(id int) (interface{}, error) {
-	user, err := as.UserRepository.GetById(id)
+func (as *AuthService) GetMe(c *fiber.Ctx) (interface{}, error) {
+	userId := helpers.GetUserId(c)
+
+	user, err := as.UserRepository.GetById(userId)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return user, nil
-}
-
-func (as *AuthService) Logout(c *fiber.Ctx) (interface{}, error) {
-	token := helpers.GetToken(c)
-	claims := helpers.ParseToken(c)
-
-	exp := claims["exp"].(float64)
-	expTime := time.Unix(int64(exp), 0)
-	duration := expTime.Sub(time.Now())
-
-	err := config.Redis.Set(c.Context(), token, token, duration).Err()
-
-	if err != nil {
-		return nil, errors.New(messageConstants.ErrFailedLogout)
-	}
-
-	return messageConstants.SuccessGeneralMessage, nil
 }
 
 func (as *AuthService) UpdateMe(updateMeForm authFormStructs.UpdateMeFormStruct, c *fiber.Ctx) (interface{}, error) {
@@ -176,36 +160,19 @@ func (as *AuthService) UpdatePassword(updatePasswordForm authFormStructs.UpdateP
 	return true, nil
 }
 
-func (as *AuthService) GetUsers(c *fiber.Ctx) (interface{}, error) {
-	var users []userModels.User
+func (as *AuthService) Logout(c *fiber.Ctx) (interface{}, error) {
+	token := helpers.GetToken(c)
+	claims := helpers.ParseToken(c)
 
-	getUsersForRedis, errForRedis := config.Redis.Get(c.Context(), "users").Result()
+	exp := claims["exp"].(float64)
+	expTime := time.Unix(int64(exp), 0)
+	duration := expTime.Sub(time.Now())
 
-	if errForRedis == nil {
-		if errUnmarshalUsers := json.Unmarshal([]byte(getUsersForRedis), &users); errUnmarshalUsers != nil {
-			return nil, errUnmarshalUsers
-		}
-
-		return users, nil
-	}
-
-	getUsers, err := as.UserRepository.GetUsers()
+	err := config.Redis.Set(c.Context(), token, token, duration).Err()
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New(messageConstants.ErrFailedLogout)
 	}
 
-	marshalUsers, marshalUsersErr := json.Marshal(getUsers)
-
-	if marshalUsersErr != nil {
-		return nil, marshalUsersErr
-	}
-
-	setUsersErr := config.Redis.Set(c.Context(), "users", marshalUsers, general.OneDay).Err()
-
-	if setUsersErr != nil {
-		return nil, setUsersErr
-	}
-
-	return getUsers, nil
+	return messageConstants.SuccessGeneralMessage, nil
 }

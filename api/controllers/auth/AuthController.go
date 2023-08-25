@@ -3,11 +3,9 @@ package auth
 import (
 	"github.com/gofiber/fiber/v2"
 	messageConstants "golang/api/constants/message"
-	"golang/api/helpers"
 	authInterfaces "golang/api/interfaces/auth"
 	authFormStructs "golang/api/structs/form/auth"
 	resultStructs "golang/api/structs/result"
-	"strconv"
 )
 
 type AuthController struct {
@@ -66,14 +64,12 @@ func (ac *AuthController) Login(c *fiber.Ctx) error {
 	return c.Status(result.Code).JSON(result)
 }
 
-func (ac *AuthController) Me(c *fiber.Ctx) error {
+func (ac *AuthController) GetMe(c *fiber.Ctx) error {
 	var (
 		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
 	)
 
-	userId := helpers.GetUserId(c)
-
-	user, err := ac.AuthService.GetUser(userId)
+	user, err := ac.AuthService.GetMe(c)
 
 	if err != nil {
 		result.Success = false
@@ -87,28 +83,6 @@ func (ac *AuthController) Me(c *fiber.Ctx) error {
 	result.Code = fiber.StatusOK
 	result.Message = messageConstants.SuccessGeneralMessage
 	result.Datas = user
-
-	return c.Status(result.Code).JSON(result)
-}
-
-func (ac *AuthController) Logout(c *fiber.Ctx) error {
-	var (
-		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
-	)
-
-	logout, err := ac.AuthService.Logout(c)
-
-	if err != nil {
-		result.Success = false
-		result.Code = fiber.StatusBadRequest
-		result.Message = err.Error()
-
-		return c.Status(result.Code).JSON(result)
-	}
-
-	result.Success = true
-	result.Code = fiber.StatusOK
-	result.Message = logout.(string)
 
 	return c.Status(result.Code).JSON(result)
 }
@@ -164,12 +138,12 @@ func (ac *AuthController) UpdatePassword(c *fiber.Ctx) error {
 	return c.Status(result.Code).JSON(result)
 }
 
-func (ac *AuthController) GetUsers(c *fiber.Ctx) error {
+func (ac *AuthController) Logout(c *fiber.Ctx) error {
 	var (
 		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
 	)
 
-	getUsers, err := ac.AuthService.GetUsers(c)
+	logout, err := ac.AuthService.Logout(c)
 
 	if err != nil {
 		result.Success = false
@@ -181,33 +155,7 @@ func (ac *AuthController) GetUsers(c *fiber.Ctx) error {
 
 	result.Success = true
 	result.Code = fiber.StatusOK
-	result.Message = messageConstants.SuccessGeneralMessage
-	result.Datas = getUsers
-
-	return c.Status(result.Code).JSON(result)
-}
-
-func (ac *AuthController) GetUser(c *fiber.Ctx) error {
-	var (
-		result *resultStructs.ResultStruct = &resultStructs.ResultStruct{}
-	)
-
-	id, _ := strconv.Atoi(c.Params("id"))
-
-	getUser, err := ac.AuthService.GetUser(id)
-
-	if err != nil {
-		result.Success = false
-		result.Code = fiber.StatusBadRequest
-		result.Message = err.Error()
-
-		return c.Status(result.Code).JSON(result)
-	}
-
-	result.Success = true
-	result.Code = fiber.StatusOK
-	result.Message = messageConstants.SuccessGeneralMessage
-	result.Datas = getUser
+	result.Message = logout.(string)
 
 	return c.Status(result.Code).JSON(result)
 }
